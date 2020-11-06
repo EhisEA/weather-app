@@ -21,9 +21,7 @@ class MaxMinTempInfoWidget extends StatelessWidget {
                 children: [
                   Text(
                     "Max temp",
-                    style: TextStyle(fontSize: getProportionatefontSize(17)
-                        // fontSize: getProportionateScreenWidth(60),
-                        ),
+                    style: TextStyle(fontSize: getProportionatefontSize(17)),
                   ),
                   Text(
                     "$maxTemp°",

@@ -22,6 +22,11 @@ class HomeView extends StatelessWidget {
           child: Scaffold(
             body: Stack(
               children: [
+                // ===================== Background ++++++++++++++
+                // ===================== Background ++++++++++++++
+                // ===================== Background ++++++++++++++
+                // ===================== Background ++++++++++++++
+                // ===================== Background ++++++++++++++
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -56,6 +61,11 @@ class HomeView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ===================== Header ++++++++++++++
+        // ===================== Header ++++++++++++++
+        // ===================== Header ++++++++++++++
+        // ===================== Header ++++++++++++++
+        // ===================== Header ++++++++++++++
         Row(
           children: [
             IconButton(
@@ -90,6 +100,11 @@ class HomeView extends StatelessWidget {
           ],
         ),
         SizedBox(height: 60),
+        // ===================== Body ++++++++++++++
+        // ===================== Body ++++++++++++++
+        // ===================== Body ++++++++++++++
+        // ===================== Body ++++++++++++++
+        // ===================== Body ++++++++++++++
         Text(
           model.weather.locationName,
           style: TextStyle(

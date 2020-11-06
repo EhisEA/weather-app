@@ -11,6 +11,7 @@ List<String> images = [
 ];
 
 class Background extends StatelessWidget {
+  //Background for Login, Signup and Start Up
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,11 +25,12 @@ class Background extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        images[index],
-                      ),
-                      fit: BoxFit.cover)),
+                image: DecorationImage(
+                    image: AssetImage(
+                      images[index],
+                    ),
+                    fit: BoxFit.cover),
+              ),
             ),
           ),
         ),

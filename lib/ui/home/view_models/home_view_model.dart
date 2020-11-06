@@ -32,7 +32,11 @@ class HomeViewModel extends BaseViewModel {
   );
 
   getWeather() async {
+    // get weather data
+    if (searchEdittingController.text.isEmpty) return;
     setBusy(ViewModelState.Busy);
+    //check if phone has internrt connection
+    //before making network call to get wether
     await _networkConfig.onNetworkAvailabilityDialog(_getWeatherNetworkRequest);
     setBusy(ViewModelState.Idle);
   }
@@ -40,16 +44,19 @@ class HomeViewModel extends BaseViewModel {
   _getWeatherNetworkRequest() async {
     WeatherModel weatherResult = await _weatherService
         .getWeatherForecast(searchEdittingController.text.toLowerCase());
+    // check if weather has no result
     if (weatherResult == null) {
       return _dialogService.showDialog(
         title: "Failed to get Weather",
         description: "no result was return for this location",
       );
     }
+    //if weather has a result update weather data
     weather = weatherResult;
   }
 
   Future<void> logOut() async {
+    // logout
     await _authenticationService.logOut();
     await _navigationService.navigateTo(LoginViewRoute);
   }

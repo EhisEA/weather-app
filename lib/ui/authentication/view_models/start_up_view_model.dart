@@ -16,6 +16,7 @@ class StartUpViewModel extends BaseViewModel {
     bool hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 
     Timer(Duration(seconds: 1), () {
+      //check if user exist
       if (hasLoggedInUser) {
         _navigationService.navigateToReplace(HomeViewRoute);
       } else {

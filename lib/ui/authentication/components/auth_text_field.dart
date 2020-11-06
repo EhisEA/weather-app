@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AuthTextField extends StatefulWidget {
+  // Sign up and login text field
+  //customised to fit requirment and handle errors
   final bool isPassword;
   final TextEditingController controller;
   final TextInputType keyboardType;
@@ -46,63 +48,64 @@ class AuthTextFieldState extends State<AuthTextField> {
       obscureText: obscure,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: 20,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: 20,
+        ),
+        hintText: widget.name,
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+        isDense: true,
+        focusColor: Colors.teal,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.teal,
+            width: 2,
           ),
-          hintText: widget.name,
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-          isDense: true,
-          focusColor: Colors.teal,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-              color: Colors.teal,
-              width: 2,
-            ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 2,
           ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.teal,
+            width: 2,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-              color: Colors.teal,
-              width: 2,
-            ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 2,
           ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-          ),
-          suffixIcon: !widget.isPassword
-              ? SizedBox()
-              : obscure
-                  ? InkWell(
-                      onTap: togglePasswordVisibility,
-                      child: Icon(
-                        Icons.visibility,
-                      ),
-                    )
-                  : InkWell(
-                      onTap: togglePasswordVisibility,
-                      child: Icon(
-                        Icons.visibility_off,
-                      ),
+        ),
+        suffixIcon: !widget.isPassword
+            ? SizedBox()
+            : obscure
+                ? InkWell(
+                    onTap: togglePasswordVisibility,
+                    child: Icon(
+                      Icons.visibility,
                     ),
-          suffixIconConstraints: BoxConstraints(
-            maxHeight: 40,
-            maxWidth: 40,
-            minHeight: 40,
-            minWidth: 40,
-          )),
+                  )
+                : InkWell(
+                    onTap: togglePasswordVisibility,
+                    child: Icon(
+                      Icons.visibility_off,
+                    ),
+                  ),
+        suffixIconConstraints: BoxConstraints(
+          maxHeight: 40,
+          maxWidth: 40,
+          minHeight: 40,
+          minWidth: 40,
+        ),
+      ),
     );
   }
 }

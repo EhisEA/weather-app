@@ -22,7 +22,6 @@ class ComponentInfoWidget extends StatelessWidget {
         Text(
           "$name",
           style: TextStyle(
-            // fontWeight: FontWeight.bold,
             fontSize: getProportionatefontSize(15),
           ),
         ),
@@ -39,7 +38,6 @@ class ComponentInfoWidget extends StatelessWidget {
         Text(
           "$rate",
           style: TextStyle(
-            // fontWeight: FontWeight.bold,
             fontSize: getProportionatefontSize(13),
           ),
         ),
