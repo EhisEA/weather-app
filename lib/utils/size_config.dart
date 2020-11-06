@@ -29,3 +29,18 @@ double getProportionateScreenWidth(double inputWidth) {
   return (inputWidth / 375.0) * screenWidth;
 }
 
+// Get the proportionate height as per screen size
+double getProportionateScreenHeightForFont(double inputHeight) {
+  double screenHeight = SizeConfig.screenHeight;
+  // 375 is the layout width that designer use
+  //using 375 so the font comes out fitting actual
+  //device width
+  return (inputHeight / 375.0) * screenHeight;
+}
+
+double getProportionatefontSize(double fontSize) {
+  if (SizeConfig.orientation == Orientation.portrait) {
+    return getProportionateScreenWidth(fontSize);
+  }
+  return getProportionateScreenHeightForFont(fontSize);
+}

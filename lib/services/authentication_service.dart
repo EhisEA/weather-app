@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:qiqi_farms/locator.dart';
-import 'package:qiqi_farms/models/user_model.dart';
-import 'package:qiqi_farms/services/firestore_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/models/user_model.dart';
+import 'package:weather_app/services/firestore_service.dart';
+
+import '../locator.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   UserModel _currentUser;
   UserModel get currentUser => _currentUser;
@@ -20,6 +21,7 @@ class AuthenticationService {
         email: email,
         password: password,
       );
+      await _populateCurrentUser(authResult.user);
       return authResult.user != null;
     } catch (e) {
       return e.message;
@@ -29,6 +31,7 @@ class AuthenticationService {
   Future signUpWithEmail({
     @required String email,
     @required String password,
+    @required String name,
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -40,7 +43,10 @@ class AuthenticationService {
       _currentUser = UserModel(
         id: authResult.user.uid,
         email: email,
+        name: name,
       );
+
+      await _firestoreService.createUser(_currentUser);
 
       return authResult.user != null;
     } catch (e) {
@@ -49,10 +55,8 @@ class AuthenticationService {
   }
 
   logOut() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
     try {
       await _firebaseAuth.signOut();
-      _prefs.clear();
     } catch (e) {
       return e.message;
     }
@@ -60,6 +64,13 @@ class AuthenticationService {
 
   Future<bool> isUserLoggedIn() async {
     var user = await _firebaseAuth.currentUser();
+    await _populateCurrentUser(user);
     return user != null;
+  }
+
+  Future _populateCurrentUser(FirebaseUser user) async {
+    if (user != null) {
+      _currentUser = await _firestoreService.getUser(user.uid);
+    }
   }
 }
