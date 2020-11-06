@@ -16,6 +16,7 @@ class FirestoreService {
 
   Future createUser(UserModel user) async {
     try {
+      // creating user in database
       await _usersCollectionReference.document(user.id).setData(user.toJson());
     } catch (e) {
       manage(e);
@@ -24,6 +25,7 @@ class FirestoreService {
 
   Future getUser(String uid) async {
     try {
+      // retriving user in database
       var userData = await _usersCollectionReference.document(uid).get();
       return UserModel.fromJson(userData.data);
     } catch (e) {
