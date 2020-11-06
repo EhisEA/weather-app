@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 WeatherModel weatherModelFromJson(String str) =>
-    WeatherModel.fromJson(json.decode(str));
+    WeatherModel.fromMap(json.decode(str));
 
 String weatherModelToJson(WeatherModel data) => json.encode(data.toJson());
 
@@ -39,6 +39,19 @@ class WeatherModel {
         minTemp: json["main"]["temp_min"].toDouble(),
         maxTemp: json["main"]["temp_max"].toDouble(),
         icon: json["weather"][0]["icon"],
+      );
+
+  factory WeatherModel.fromMap(Map<String, dynamic> json) => WeatherModel(
+        locationName: json["locationName"],
+        wind: json["wind"].toDouble(),
+        cloud: json["cloud"].toDouble(),
+        humidity: json["humidity"].toDouble(),
+        weatherDescription: json["weatherDescription"],
+        weather: json["weather"].toString().toLowerCase(),
+        temp: json["temp"].toDouble(),
+        minTemp: json["minTemp"].toDouble(),
+        maxTemp: json["maxTemp"].toDouble(),
+        icon: json["icon"],
       );
 
   Map<String, dynamic> toJson() => {

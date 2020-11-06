@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/base_view_model.dart';
 import 'package:weather_app/constants/routing_contants.dart';
 import 'package:weather_app/locator.dart';
@@ -53,11 +54,30 @@ class HomeViewModel extends BaseViewModel {
     }
     //if weather has a result update weather data
     weather = weatherResult;
+    saveWeatherToPrefs();
+  }
+
+  getWetherFromPrefs() async {
+    setBusy(ViewModelState.Idle);
+    //checking for last save weather details
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    String weatherFromPrefs = _sharedPreferences.getString("weather");
+    // if weather details exist update weather detail
+    if (weatherFromPrefs != null)
+      weather = weatherModelFromJson(weatherFromPrefs);
+    setBusy(ViewModelState.Idle);
   }
 
   Future<void> logOut() async {
     // logout
     await _authenticationService.logOut();
     await _navigationService.navigateTo(LoginViewRoute);
+  }
+
+  void saveWeatherToPrefs() async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    await _sharedPreferences.setString("weather", weatherModelToJson(weather));
   }
 }

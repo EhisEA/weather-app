@@ -15,6 +15,7 @@ class HomeView extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.portrait;
     SizeConfig().init(context);
     return ViewModelBuilder<HomeViewModel>.reactive(
+      onModelReady: (model) => model.getWetherFromPrefs(),
       viewModelBuilder: () => HomeViewModel(),
       builder: (context, model, _) {
         return LoaderPage(
