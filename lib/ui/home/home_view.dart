@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/models/weather_model.dart';
-import 'package:weather_app/services/weather_service.dart';
+import 'package:stacked/stacked.dart';
+import 'package:weather_app/ui/home/components/max_min_temp_info_widget.dart';
+import 'package:weather_app/ui/home/view_models/home_view_model.dart';
 import 'package:weather_app/utils/size_config.dart';
+import 'package:weather_app/widgets/loader_page.dart';
+
+import 'components/component_info_widget.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -10,42 +14,69 @@ class HomeView extends StatelessWidget {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     SizeConfig().init(context);
-    return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/rain_background.jpg"),
-                fit: BoxFit.cover),
+    return ViewModelBuilder<HomeViewModel>.reactive(
+      viewModelBuilder: () => HomeViewModel(),
+      builder: (context, model, _) {
+        return LoaderPage(
+          busy: model.isBusy,
+          child: Scaffold(
+            body: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                          "assets/images/${model.weather.weather}_background.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  color: Colors.black.withOpacity(0.4),
+                  child: SafeArea(
+                    child: isPortrait
+                        ? content(context, isPortrait, model)
+                        : SingleChildScrollView(
+                            child: content(context, isPortrait, model),
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-          height: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          color: Colors.black.withOpacity(0.4),
-          child: SafeArea(
-              child: isPortrait
-                  ? content(context, isPortrait)
-                  : SingleChildScrollView(
-                      child: content(context, isPortrait),
-                    )),
-        )
-      ],
-    ));
+        );
+      },
+    );
   }
 
-  content(context, isPortrait) {
+  content(context, bool isPortrait, HomeViewModel model) {
     double width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
+            IconButton(
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: model.logOut,
+            ),
+            SizedBox(
+              width: 20,
+            ),
             Expanded(
               child: TextField(
-                decoration:
-                    InputDecoration(fillColor: Colors.white, filled: true),
+                controller: model.searchEdittingController,
+                decoration: InputDecoration(
+                  hintText: "Search for places e.g london",
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
               ),
             ),
             IconButton(
@@ -54,16 +85,13 @@ class HomeView extends StatelessWidget {
                 color: Colors.white,
                 size: 40,
               ),
-              onPressed: () {
-                print("ff");
-                WeatherService().getWeatherForecast("");
-              },
+              onPressed: model.getWeather,
             ),
           ],
         ),
         SizedBox(height: 60),
         Text(
-          "Abuja",
+          model.weather.locationName,
           style: TextStyle(
             fontSize: getProportionatefontSize(50),
           ),
@@ -81,7 +109,7 @@ class HomeView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "20°",
+                  "${model.weather.temp}°",
                   style: TextStyle(
                     fontSize: getProportionatefontSize(50),
                   ),
@@ -89,18 +117,19 @@ class HomeView extends StatelessWidget {
                 Row(
                   children: [
                     Image.asset(
-                      "assets/icons/11n.png",
+                      "assets/icons/${model.weather.icon}.png",
                       scale: 3,
                       color: Colors.white,
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 3),
                     Container(
                       width: width - 140 - getProportionateScreenWidth(100),
                       child: Text(
-                        "thunderstorm with heavy drizzle ",
+                        model.weather.weatherDescription,
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: getProportionatefontSize(14),
+                          fontWeight: FontWeight.w700,
+                          fontSize: getProportionatefontSize(16),
                         ),
                       ),
                     ),
@@ -109,7 +138,10 @@ class HomeView extends StatelessWidget {
               ],
             ),
             Spacer(),
-            r(context)
+            MaxMinTempInfoWidget(
+              maxTemp: model.weather.maxTemp.toString(),
+              minTemp: model.weather.minTemp.toString(),
+            )
           ],
         ),
         isPortrait ? Spacer() : SizedBox(height: 40),
@@ -124,103 +156,25 @@ class HomeView extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            d("wind", (2.1) / 32.7, "m/s", "2.1", context),
-            d("cloud ", 15 / 100, "%", "15", context),
-            d("Humidity", 13, "%", "32", context)
-          ],
-        )
-      ],
-    );
-  }
-
-  r(context) {
-    SizeConfig().init(context);
-    double width = MediaQuery.of(context).size.width;
-    return Container(
-      width: getProportionatefontSize(110),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Icon(Icons.arrow_upward, color: Colors.white),
-              Column(
-                children: [
-                  Text(
-                    "Max temp",
-                    style: TextStyle(fontSize: getProportionatefontSize(17)
-                        // fontSize: getProportionateScreenWidth(60),
-                        ),
-                  ),
-                  Text(
-                    "20°",
-                    style: TextStyle(
-                      fontSize: getProportionatefontSize(26),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Divider(color: Colors.white),
-          Row(
-            children: [
-              Icon(Icons.arrow_downward, color: Colors.white),
-              Column(
-                children: [
-                  Text(
-                    "Min temp",
-                    style: TextStyle(fontSize: getProportionatefontSize(17)),
-                  ),
-                  Text(
-                    "20°",
-                    style: TextStyle(
-                      fontSize: getProportionatefontSize(26),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  d(String name, double percentage, String rate, String value, context) {
-    SizeConfig().init(context);
-    return Column(
-      children: [
-        Text(
-          "$name",
-          style: TextStyle(
-            // fontWeight: FontWeight.bold,
-            fontSize: getProportionatefontSize(15),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            "$value",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: getProportionatefontSize(23),
+            ComponentInfoWidget(
+              name: "wind",
+              percentage: model.weather.wind / 32.7,
+              rate: "m/s",
+              value: model.weather.wind.toString(),
             ),
-          ),
-        ),
-        Text(
-          "$rate",
-          style: TextStyle(
-            // fontWeight: FontWeight.bold,
-            fontSize: getProportionatefontSize(13),
-          ),
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        CircularProgressIndicator(
-          value: percentage,
-          backgroundColor: Colors.black.withOpacity(0.3),
-          valueColor: AlwaysStoppedAnimation(Colors.red),
+            ComponentInfoWidget(
+              name: "cloud",
+              percentage: model.weather.cloud / 100,
+              rate: "%",
+              value: model.weather.cloud.toString(),
+            ),
+            ComponentInfoWidget(
+              name: "Humidity",
+              percentage: model.weather.humidity / 32.7,
+              rate: "%",
+              value: model.weather.humidity.toString(),
+            ),
+          ],
         )
       ],
     );

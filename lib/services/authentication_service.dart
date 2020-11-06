@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/models/user_model.dart';
 import 'package:weather_app/services/firestore_service.dart';
 
@@ -21,7 +22,7 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      await _populateCurrentUser(authResult.user);
+      // await _populateCurrentUser(authResult.user);
       return authResult.user != null;
     } catch (e) {
       return e.message;
@@ -55,8 +56,11 @@ class AuthenticationService {
   }
 
   logOut() async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     try {
       await _firebaseAuth.signOut();
+      await _sharedPreferences.clear();
     } catch (e) {
       return e.message;
     }

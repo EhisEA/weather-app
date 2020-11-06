@@ -83,7 +83,7 @@ class NetworkConfig {
   onNetworkAvailabilityDialog(Function onNetwork) async {
     // if network  is available run the function [onNetwork]
     if (await _networkAvailable()) {
-      onNetwork();
+      await onNetwork();
     } else {
       // if network isn't available show a dialog
       await _dialogService.showDialog(

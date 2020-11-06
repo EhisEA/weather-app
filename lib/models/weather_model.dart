@@ -6,17 +6,17 @@ WeatherModel weatherModelFromJson(String str) =>
 String weatherModelToJson(WeatherModel data) => json.encode(data.toJson());
 
 class WeatherModel {
-  WeatherModel({
-    this.locationName,
-    this.wind,
-    this.cloud,
-    this.humidity,
-    this.weatherDescription,
-    this.temp,
-    this.minTemp,
-    this.maxTemp,
-    this.icon,
-  });
+  WeatherModel(
+      {this.locationName,
+      this.wind,
+      this.cloud,
+      this.humidity,
+      this.weatherDescription,
+      this.temp,
+      this.minTemp,
+      this.maxTemp,
+      this.icon,
+      this.weather});
 
   String locationName;
   double wind;
@@ -27,17 +27,18 @@ class WeatherModel {
   double minTemp;
   double maxTemp;
   String icon;
-
+  String weather;
   factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
         locationName: json["name"],
         wind: json["wind"]["speed"].toDouble(),
         cloud: json["clouds"]["all"].toDouble(),
         humidity: json["main"]["humidity"].toDouble(),
-        weatherDescription: json["weather"]["description"],
+        weatherDescription: json["weather"][0]["description"],
+        weather: json["weather"][0]["main"].toString().toLowerCase(),
         temp: json["main"]["temp"].toDouble(),
-        minTemp: json["main"]["minTemp_min"].toDouble(),
+        minTemp: json["main"]["temp_min"].toDouble(),
         maxTemp: json["main"]["temp_max"].toDouble(),
-        icon: json["weather"]["icon"],
+        icon: json["weather"][0]["icon"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +51,6 @@ class WeatherModel {
         "minTemp": minTemp,
         "maxTemp": maxTemp,
         "icon": icon,
+        "weather": weather,
       };
 }

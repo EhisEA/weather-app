@@ -1,17 +1,22 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:weather_app/constants/keys.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 class WeatherService {
-  getWeatherForecast(String city) async {
+  Future<WeatherModel> getWeatherForecast(String city) async {
     try {
       String url =
-          "https://api.openweathermap.org/data/2.5/weather?q=Londo,uk&units=metric&APPID=946b9f2606654e72eae72e7146cd6150";
+          "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&APPID=$WeatherApiKey";
 
       http.Response response = await http.get(url);
-      print(json.decode(response.body));
+      Map<String, dynamic> result = json.decode(response.body);
+
+      if (result == null || result["message"] != null) return null;
+      return WeatherModel.fromJson(result);
     } catch (e) {
-      print("error  " + e);
+      return null;
     }
   }
 }

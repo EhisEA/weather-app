@@ -47,4 +47,8 @@ class SignUpViewModel extends BaseViewModel {
       }
     }
   }
+
+  toLogin() {
+    _navigationService.navigateToReplace(LoginViewRoute);
+  }
 }
