@@ -1,9 +1,29 @@
 import 'package:flutter/material.dart';
 
 class AuthTextField extends StatelessWidget {
+
+
+bool isPassword;
+TextEditingController controller;
+TextInputType keyboardType;
+Function (String) validate;
+String name;
+
+AuthTextFieldState createState=>AuthTextFieldState();
+}
+
+class AuthTextFieldState extends State<AuthTextField>{
+bool obscure;
   @override
   Widget build(BuildContext context) {
+Obscure=widget.isPassword;
     return TextFormField(
+controller: widget.controller,
+Validate:(value){
+If(value.isEmpty()) return "${widget.name} cannot be empty";
+return Widget.validate();
+},
+obscureText:widget.isPassword,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         focusColor: Colors.teal,
