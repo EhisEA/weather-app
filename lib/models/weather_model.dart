@@ -16,7 +16,8 @@ class WeatherModel {
       this.minTemp,
       this.maxTemp,
       this.icon,
-      this.weather});
+      this.weather,
+      this.date});
 
   String locationName;
   double wind;
@@ -28,6 +29,7 @@ class WeatherModel {
   double maxTemp;
   String icon;
   String weather;
+  DateTime date;
   factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
         locationName: json["name"],
         wind: json["wind"]["speed"].toDouble(),
@@ -39,6 +41,7 @@ class WeatherModel {
         minTemp: json["main"]["temp_min"].toDouble(),
         maxTemp: json["main"]["temp_max"].toDouble(),
         icon: json["weather"][0]["icon"],
+        date: DateTime.now(),
       );
 
   factory WeatherModel.fromMap(Map<String, dynamic> json) => WeatherModel(
@@ -52,6 +55,7 @@ class WeatherModel {
         minTemp: json["minTemp"].toDouble(),
         maxTemp: json["maxTemp"].toDouble(),
         icon: json["icon"],
+        date: DateTime.parse(json["date"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +69,6 @@ class WeatherModel {
         "maxTemp": maxTemp,
         "icon": icon,
         "weather": weather,
+        "date": date.toString(),
       };
 }

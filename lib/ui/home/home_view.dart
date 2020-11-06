@@ -113,7 +113,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         Text(
-          "${DateFormat.jm().format(DateTime.now())} - ${DateFormat("EEEE, dd MMMM").format(DateTime.now())}",
+          "${DateFormat.jm().format(model.weather.date)} - ${DateFormat("EEEE, dd MMMM").format(model.weather.date)}",
           style: TextStyle(
             fontSize: getProportionatefontSize(16),
           ),

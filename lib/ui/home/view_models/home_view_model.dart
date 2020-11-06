@@ -30,6 +30,7 @@ class HomeViewModel extends BaseViewModel {
     temp: 25,
     weatherDescription: "Raining",
     wind: 3,
+    date: DateTime(2020, 11, 5),
   );
 
   getWeather() async {
