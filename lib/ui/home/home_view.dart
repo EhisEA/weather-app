@@ -21,6 +21,7 @@ class HomeView extends StatelessWidget {
         return LoaderPage(
           busy: model.isBusy,
           child: Scaffold(
+            resizeToAvoidBottomPadding: false,
             body: Stack(
               children: [
                 // ===================== Background ++++++++++++++
